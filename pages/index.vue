@@ -1,6 +1,7 @@
 <template>
   <div class="mainpage">
-    <nice-box />
+    <nice-box class="niceBox" />
+    <nice-box class="niceBox" />
   </div>
 </template>
 
@@ -14,5 +15,9 @@ export default {};
   background: #ccc;
   min-height: 100vh;
   padding: 100px 0 0 50px;
+  display: flex;
+}
+.niceBox {
+  margin-right: 10px;
 }
 </style>

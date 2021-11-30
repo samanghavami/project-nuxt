@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="parent_main_box">
+    <div
+      class="parent_main_box"
+      v-click-outside="onClickOutsideStandard"
+      @mouseenter="mouseEnterBox"
+      @mouseleave="mouseLeaveBox"
+    >
       <div class="mainbox">
-        <div v-if="isShowMenu == true">
+        <div v-if="isShowMenu == false">
           <div class="top_main_box">
             <v-btn rounded elevation="2" small disabled>BOOST</v-btn>
           </div>
@@ -89,12 +94,17 @@
       </div>
       <div
         class="back_section_box"
-        :class="isShowMenu == true ? 'bg_icon_background' : ' '"
+        :class="
+          menuComeTop == true || isShowMenu == true ? 'bg_icon_background' : ''
+        "
+        @click="isShowMenu = !isShowMenu"
       >
         <v-icon
-          class=""
-          @click="isShowMenu = !isShowMenu"
-          :class="isShowMenu == true ? 'icon_menu_box_active' : 'icon_menu_box'"
+          :class="
+            menuComeTop == true || isShowMenu == true
+              ? 'icon_menu_box_active'
+              : 'icon_menu_box'
+          "
           >mdi-plus</v-icon
         >
       </div>
@@ -108,6 +118,7 @@ export default {
   data() {
     return {
       isShowMenu: false,
+      menuComeTop: false,
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
@@ -118,10 +129,23 @@ export default {
       menu2: false,
     };
   },
+  methods: {
+    mouseEnterBox() {
+      this.menuComeTop = true;
+    },
+    mouseLeaveBox() {
+      this.menuComeTop = false;
+    },
+    onClickOutsideStandard() {
+      this.menuComeTop = false;
+      this.isShowMenu = false;
+      console.log(11);
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .parent_main_box {
   position: relative;
   width: 300px;
@@ -177,24 +201,24 @@ export default {
   padding: 10px;
 }
 
-.mainbox:hover ~ .back_section_box {
-  top: -40px;
-}
-.back_section_box:hover {
-  top: -40px;
-}
-
 .icon_menu_box {
   color: #922ebd;
 }
 .icon_menu_box_active {
-  //   color: white;
-  color: #922ebd;
+  color: white;
+  transition: all 0.5s;
 }
 .bg_icon_background {
-  //   background: #922ebd;
-  //   color: white;
-  color: #922ebd;
+  background: #922ebd;
+  color: white;
+  top: -40px;
+  transition: all 0.5s;
+}
+.bg_icon_background_active {
+  background: #922ebd;
+  transition: all 0.5s;
+  color: white;
+  top: -40px;
 }
 .icon_create {
   background: #3a11f138;
@@ -218,8 +242,8 @@ export default {
   position: absolute;
   top: 50%;
   width: 9999px;
-  height: 5px; /* space between lines */
-  margin-top: -2px; /* adjust vertical align */
+  height: 5px;
+  margin-top: -2px;
   border-top: 1px dotted rgb(85, 85, 85);
 }
 
