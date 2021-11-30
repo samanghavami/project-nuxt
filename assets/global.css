@@ -1,0 +1,11 @@
+.theme--light.v-btn.v-btn--has-bg {
+  background-color: #ffffff;
+}
+.v-btn__content {
+  color: #7c7c7c;
+}
+.theme--light.v-input input,
+.theme--light.v-input textarea {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 12px;
+}
