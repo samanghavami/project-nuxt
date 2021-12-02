@@ -13,6 +13,12 @@
             >
               <product-card :productObject="product" />
             </v-col>
+            <div
+              v-show="getProductState.length < 1"
+              class="text-center display-1 ml-auto mr-auto mt-5"
+            >
+              در حال بارگذاری...
+            </div>
           </v-row>
         </v-container>
       </div>

@@ -43,7 +43,9 @@
 
       <v-card-text class="text-right">
         <!-- <div>{{ isInCart(productObject.id) ? "true" : "false" }}</div> -->
-        <small class="green--text" v-if="isInCart(productObject.id)"
+        <small
+          class="green--text"
+          v-if="isInCart(productObject.id) || AddedToBasket == true"
           >این محصول در سبد خرید شما موجود است</small
         >
 
@@ -69,12 +71,44 @@
 <script>
 export default {
   props: ["productObject"],
+  data() {
+    return {
+      AddedToBasket: false,
+    };
+  },
   methods: {
     addToBasket(product) {
       let oldItems;
       oldItems = JSON.parse(localStorage.getItem("Cart")) || [];
-      oldItems.push(product);
-      localStorage.setItem("Cart", JSON.stringify(oldItems));
+      let productAvailable = oldItems.some((el) => el.id === product.id);
+
+      if (productAvailable) {
+        let productFinder = oldItems.find((el) => el.id === product.id);
+        let productcount = productFinder.count;
+        let newItem = oldItems.filter((el) => el.id !== productFinder.id);
+        localStorage.setItem("Cart", JSON.stringify(newItem));
+        newItem.push({
+          id: product.id,
+          name: product.name,
+          price: product.prices.price,
+          totalPrice: product.prices.price * (productcount + 1),
+          count: productcount + 1,
+        });
+        localStorage.setItem("Cart", JSON.stringify(newItem));
+        console.log("bod");
+      } else {
+        console.log("nabod");
+
+        oldItems.push({
+          id: product.id,
+          name: product.name,
+          price: product.prices.price,
+          totalPrice: product.prices.price * 1,
+          count: 1,
+        });
+        localStorage.setItem("Cart", JSON.stringify(oldItems));
+      }
+      this.AddedToBasket = true;
     },
     isInCart(id) {
       let cartItem = JSON.parse(localStorage.getItem("Cart")) || [];

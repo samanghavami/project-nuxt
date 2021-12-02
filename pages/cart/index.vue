@@ -6,22 +6,22 @@
           <v-list dense>
             <v-subheader>سبد خرید شما</v-subheader>
             <v-list-item-group color="primary">
-              <v-list-item v-for="(item, aa, vv) in counter" :key="item.id">
+              <v-list-item v-for="item in cartItems" :key="item.id">
                 <v-list-item-content>
                   <v-list-item-title class="d-flex justify-space-between">
                     <div>
-                      {{ aa }}
+                      {{ item.name }}
                     </div>
                     <div>
                       <span>تعداد</span>
-                      <span>{{ item }}</span>
+                      <span>{{ item.count }}</span>
                     </div>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <div v-if="counter === null || counter.length < 1">
+              <v-list-item v-if="cartItems === null">
                 سبد خرید خالی است
-              </div>
+              </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-card>
@@ -30,10 +30,8 @@
         <div class="left_section_cart">
           <div>
             <span>تعداد کل محصولات</span> -
-            <span v-if="cartItems === null || Object.keys(cartItems).length < 1"
-              >0</span
-            >
-            <span v-else>{{ cartItems.length }}</span>
+            <span v-if="cartItems === null">0</span>
+            <span v-else>{{ sumOfCount }}</span>
           </div>
 
           <div class="mt-4">
@@ -53,6 +51,7 @@ export default {
       cartItems: [],
       counter: null,
       pricesInCart: [],
+      CountInCart: [],
     };
   },
   created() {
@@ -60,17 +59,26 @@ export default {
       this.cartItems = JSON.parse(localStorage.getItem("Cart"));
     }
   },
-  mounted() {
-    this.makecartItems();
-  },
   computed: {
     sumOfPrice() {
       if (this.cartItems && this.cartItems.length > 0) {
         this.cartItems.map((product) => {
-          this.pricesInCart.push(parseInt(product.prices.price));
+          this.pricesInCart.push(parseInt(product.totalPrice));
         }, 0);
-        console.log(this.pricesInCart);
         const sum = this.pricesInCart.reduce((accumulator, a) => {
+          return accumulator + a;
+        }, 0);
+        return sum;
+      } else {
+        return 0;
+      }
+    },
+    sumOfCount() {
+      if (this.cartItems && this.cartItems.length > 0) {
+        this.cartItems.map((product) => {
+          this.CountInCart.push(parseInt(product.count));
+        }, 0);
+        const sum = this.CountInCart.reduce((accumulator, a) => {
           return accumulator + a;
         }, 0);
         return sum;
