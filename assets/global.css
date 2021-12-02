@@ -9,3 +9,7 @@
   color: rgba(0, 0, 0, 0.87);
   font-size: 12px;
 }
+
+.row {
+  /* flex-direction: row-reverse; */
+}

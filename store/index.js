@@ -1,23 +1,26 @@
 export const state = () => ({
-  users: [],
+  products: [],
 });
 
-export const getters = {};
-
-export const actions = {
-  async getUsers({ commit }) {
-    const users = await this.$axios.$get(
-      `https://randomuser.me/api/?results=10`
-    );
-    commit("addUsers", users.results);
-    return users.results;
+export const getters = {
+  getProductState(state) {
+    return state.products;
   },
 };
 
 export const mutations = {
-  addUsers(state, payload) {
-    console.log(payload);
-    state.users = payload;
-    // state.users.push(...payload);
+  getProducts(state, payload) {
+    state.products = payload;
+  },
+};
+
+export const actions = {
+  async getProducts({ commit }) {
+    const products = await this.$axios.$get(
+      `https://insarzamin.ir/wp-json/wc/store/products`
+    );
+    // console.log(111, products);
+    commit("getProducts", products);
+    return products;
   },
 };
